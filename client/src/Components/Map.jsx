@@ -1,12 +1,12 @@
 import React, { useEffect, useRef, useState } from "react";
-import { YMaps, Map, Placemark, useYMaps, useLoad } from '@pbe/react-yandex-maps';
+import { YMaps, Map, Placemark,useYMaps } from '@pbe/react-yandex-maps';
 import axios from 'axios';
 import citiesRU from '../citiesRU.json';
 
 
 function MainMap() {
     return (
-        <YMaps query={{ apikey: '6ee3a7c7-546e-44ad-8333-de26a7ea6e19' }}>
+        <YMaps>
             <div>
                 <InnerMap />
             </div>
@@ -17,29 +17,44 @@ function MainMap() {
 export default MainMap;
 
 function InnerMap() {
-    const ymaps = useYMaps();
+    const [ymaps,setYMaps] = useState(null);
     const mapRef = useRef(null);
-    const [isYmapsLoaded, setIsYmapsLoaded] = useState(false);
     const [placemarkGeometry, setPlacemarkGeometry] = React.useState(null);
     const [placemarkProperties, setPlacemarkProperties] = React.useState({
         iconCaption: 'поиск...',
         balloonContent: ''
     });
 
-    useEffect(() => {
-        if (ymaps && ymaps.geocode) {
-            setIsYmapsLoaded(true);
+    const loadYmaps = new Promise((resolve, reject) => {
+        if (window.ymaps) {
+            resolve();
+        } else {
+        const script = document.createElement('script');
+        script.src = 'https://api-maps.yandex.ru/2.1/?apikey=6ee3a7c7-546e-44ad-8333-de26a7ea6e19&lang=ru_RU'; // URL скрипта Yandex Maps
+        script.onload = resolve;
+        script.onerror = reject;
+        document.head.append(script);
         }
-    }, [ymaps]);
-
+    });
+    
     useEffect(() => {
-        if (ymaps.geocode) {
-            getAddress(placemarkGeometry);
-        }
-    }, [ymaps, placemarkGeometry]);
+        loadYmaps.then(() => {
+            const ymaps = window.ymaps;
+            setYMaps(window.ymaps)
+            ymaps.ready(() => {
+                // ymaps.geocode('Минск').then((result) => {
+                //     console.log('Результат геокодирования:', result.geoObjects.get(0).geometry.getCoordinates());
+                //     // Ваш код для обработки результата
+                // });
+            });
+        }).catch((error) => {
+            console.error('Ошибка при загрузке Yandex Maps:', error);
+        });
+    }, []);
 
     const handleMapClick = (e) => {
         const coords = e.get('coords');
+        console.log(coords)
         setPlacemarkGeometry(coords);
         getAddress(coords);
     };
@@ -51,7 +66,9 @@ function InnerMap() {
 
 
     const getAddress = (coords) => {
-        if (!isYmapsLoaded) return;
+        if (!ymaps) {
+            return;
+        }
         setPlacemarkProperties(prev => ({ ...prev, iconCaption: 'поиск...' }));
         ymaps.geocode(coords).then(function (res) {
             let firstGeoObject = res.geoObjects.get(0);
@@ -63,10 +80,9 @@ function InnerMap() {
             if (locality[0]) {
                 let city = locality[0];
                 if (city) {
-                    let radius = document.getElementById('radius').value;
                     getCityCode(city).then((wikiDataId) => {
                         if (wikiDataId != -1)
-                            getAllData(wikiDataId, radius).then((allData) => {
+                            getAllData(wikiDataId, 100).then((allData) => {
                                 console.log(allData);
                             });
                     });
