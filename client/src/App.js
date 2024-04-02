@@ -1,5 +1,5 @@
 import CarsSelect from './Components/CarsSelect';
-import './index.css';
+import './index.scss';
 
 function App() {
   return (

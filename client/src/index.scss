@@ -1,0 +1,74 @@
+$eerie-black: #222222ff;
+$lapis-lazuli: #1c5d99ff;
+$powder-blue: #bbcde5ff;
+
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+.deliManage {
+  fieldset {
+    border: 2px solid $powder-blue;
+    border-radius: 15px;
+
+    .inputRadio {
+      display: flex;
+      cursor: pointer;
+      font-weight: 500;
+      position: relative;
+      overflow: hidden;
+      margin-bottom: 0.375em;
+      transition: background-color 0.2s;
+      padding: 5px 7px;
+      border-radius: 100px;
+
+      &:hover {
+        background-color: mix(#fff, $lapis-lazuli, 84%);
+      }
+
+      input {
+        position: absolute;
+        left: -9999px;
+
+        &:checked+label {
+          background-color: mix(#fff, $lapis-lazuli, 84%);
+
+          &:before {
+            box-shadow: inset 0 0 0 0.4375em $lapis-lazuli;
+          }
+        }
+      }
+
+      label {
+        display: flex;
+        align-items: center;
+        padding: 5px 7px;
+        border-radius: 100px;
+
+        &:before {
+          display: flex;
+          flex-shrink: 0;
+          content: "";
+          background-color: #fff;
+          width: 1.5em;
+          height: 1.5em;
+          border-radius: 50%;
+          margin-right: 0.375em;
+          transition: 0.25s ease;
+          box-shadow: inset 0 0 0 0.125em $lapis-lazuli;
+        }
+      }
+    }
+  }
+}
