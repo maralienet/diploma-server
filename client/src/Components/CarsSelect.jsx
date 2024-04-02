@@ -4,6 +4,9 @@ function CarsSelect() {
     return (
         <div className="carSlct deliManage">
             <fieldset>
+                <div className="header">
+                    Выбор грузовика
+                </div>
                 <div className="inputRadio">
                     <input type="radio" name='car' id='Volvo7456' />
                     <label for='Volvo7456'>Volvo FH16 (AX 7456-7)</label>

@@ -2,19 +2,37 @@ $eerie-black: #222222ff;
 $lapis-lazuli: #1c5d99ff;
 $powder-blue: #bbcde5ff;
 
+@mixin mngInput {
+  cursor: pointer;
+  font-weight: 500;
+  overflow: hidden;
+  margin-bottom: 0.375em;
+  transition: background-color 0.2s;
+  padding: 5px 7px;
+  border-radius: 100px;
+}
 
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI',
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+#map {
+  width: 100%;
+  height: 700px;
+  background-color: #85deff;
+}
+
+[class*="copyrights-pane"] {
+  display: none !important;
+}
+
+.mainManage {
+  display: flex;
+  flex-wrap: wrap;
 }
 
 .deliManage {
@@ -22,18 +40,21 @@ code {
     border: 2px solid $powder-blue;
     border-radius: 15px;
 
-    .inputRadio {
-      display: flex;
-      cursor: pointer;
+    .header {
       font-weight: 500;
-      position: relative;
-      overflow: hidden;
-      margin-bottom: 0.375em;
-      transition: background-color 0.2s;
-      padding: 5px 7px;
-      border-radius: 100px;
+      font-size: 1.1em;
+      margin: 5px 0 15px 15px;
+    }
+
+    .inputRadio,
+    .inputChkbox {
+      @include mngInput;
 
       &:hover {
+        background-color: mix(#fff, $lapis-lazuli, 84%);
+      }
+
+      &:has(input:checked) {
         background-color: mix(#fff, $lapis-lazuli, 84%);
       }
 
@@ -42,8 +63,6 @@ code {
         left: -9999px;
 
         &:checked+label {
-          background-color: mix(#fff, $lapis-lazuli, 84%);
-
           &:before {
             box-shadow: inset 0 0 0 0.4375em $lapis-lazuli;
           }
@@ -67,6 +86,22 @@ code {
           margin-right: 0.375em;
           transition: 0.25s ease;
           box-shadow: inset 0 0 0 0.125em $lapis-lazuli;
+        }
+      }
+    }
+
+    .inputChkbox {
+      label {
+        &:before {
+          border-radius: 5px;
+        }
+      }
+
+      input {
+        &:checked+label {
+          &:before {
+            box-shadow: inset 0 0 0 0.4875em $lapis-lazuli;
+          }
         }
       }
     }
