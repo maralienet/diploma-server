@@ -1,7 +1,12 @@
 import React, { useEffect, useRef, useState } from "react";
-import { YMaps, Map, Placemark,useYMaps } from '@pbe/react-yandex-maps';
+import { YMaps, Map, Placemark } from '@pbe/react-yandex-maps';
 import axios from 'axios';
 import citiesRU from '../citiesRU.json';
+import { useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
+
+import { addCity, clearCities } from "../Store/citiesSlice";
+
 
 
 function MainMap() {
@@ -17,44 +22,49 @@ function MainMap() {
 export default MainMap;
 
 function InnerMap() {
-    const [ymaps,setYMaps] = useState(null);
+    const selectedCities = useSelector(state => state.selectedCities.selectedCities);
+    const [cities, setCities] = useState(null);
+    const [ymaps, setYMaps] = useState(null);
     const mapRef = useRef(null);
     const [placemarkGeometry, setPlacemarkGeometry] = React.useState(null);
     const [placemarkProperties, setPlacemarkProperties] = React.useState({
         iconCaption: 'поиск...',
         balloonContent: ''
     });
+    const dispatch = useDispatch();
 
     const loadYmaps = new Promise((resolve, reject) => {
         if (window.ymaps) {
             resolve();
         } else {
-        const script = document.createElement('script');
-        script.src = 'https://api-maps.yandex.ru/2.1/?apikey=6ee3a7c7-546e-44ad-8333-de26a7ea6e19&lang=ru_RU'; // URL скрипта Yandex Maps
-        script.onload = resolve;
-        script.onerror = reject;
-        document.head.append(script);
+            const script = document.createElement('script');
+            script.src = 'https://api-maps.yandex.ru/2.1/?apikey=6ee3a7c7-546e-44ad-8333-de26a7ea6e19&lang=ru_RU'; // URL скрипта Yandex Maps
+            script.onload = resolve;
+            script.onerror = reject;
+            document.head.append(script);
         }
     });
-    
+
     useEffect(() => {
         loadYmaps.then(() => {
             const ymaps = window.ymaps;
             setYMaps(window.ymaps)
             ymaps.ready(() => {
-                // ymaps.geocode('Минск').then((result) => {
-                //     console.log('Результат геокодирования:', result.geoObjects.get(0).geometry.getCoordinates());
-                //     // Ваш код для обработки результата
-                // });
             });
         }).catch((error) => {
             console.error('Ошибка при загрузке Yandex Maps:', error);
         });
     }, []);
 
+    useEffect(() => {
+        if (cities){
+            dispatch(clearCities());
+            cities.forEach(city => dispatch(addCity(city)));
+        }
+    }, [cities]);
+
     const handleMapClick = (e) => {
         const coords = e.get('coords');
-        console.log(coords)
         setPlacemarkGeometry(coords);
         getAddress(coords);
     };
@@ -63,7 +73,6 @@ function InnerMap() {
         const coords = e.originalEvent.target.geometry.getCoordinates();
         getAddress(coords);
     };
-
 
     const getAddress = (coords) => {
         if (!ymaps) {
@@ -81,10 +90,28 @@ function InnerMap() {
                 let city = locality[0];
                 if (city) {
                     getCityCode(city).then((wikiDataId) => {
-                        if (wikiDataId != -1)
+                        if (wikiDataId != -1) {
+                            let cits;
                             getAllData(wikiDataId, 100).then((allData) => {
-                                console.log(allData);
+                                cits = allData.map((item) => ({
+                                    id: item.id,
+                                    name: item.name,
+                                    longitude: item.longitude,
+                                    latitude: item.latitude,
+                                    wikiDataId: item.wikiDataId
+                                }));
+                                cits.sort(function (a, b) {
+                                    if (a.name < b.name) {
+                                      return -1;
+                                    }
+                                    if (a.name > b.name) {
+                                      return 1;
+                                    }
+                                    return 0;
+                                  });
+                                setCities(cits);
                             });
+                        }
                     });
                 }
             }
@@ -132,18 +159,22 @@ function InnerMap() {
             return new Promise(resolve => {
                 setTimeout(() => {
                     findNearCities(url).then((response) => {
-                        const filteredData = response.data.filter(city => citiesRU.some(cityRU => cityRU.wikiDataId === city.wikiDataId && cityRU.id === city.id));
-                        allData = allData.concat(filteredData);
-                        let nextLink;
-                        if (response.links)
-                            nextLink = response.links.find(link => link.rel === 'next');
-                        if (nextLink) {
-                            resolve(getNextPage(`https://wft-geo-db.p.rapidapi.com${nextLink.href}`));
-                            console.log(i++)
+                        if (response) {
+                            const filteredData = response.data.filter(city => citiesRU.some(cityRU => cityRU.wikiDataId === city.wikiDataId && cityRU.id === city.id));
+                            allData = allData.concat(filteredData);
+                            let nextLink;
+                            if (response.links)
+                                nextLink = response.links.find(link => link.rel === 'next');
+                            if (nextLink) {
+                                resolve(getNextPage(`https://wft-geo-db.p.rapidapi.com${nextLink.href}`));
+                                console.log(i++)
+                            } else {
+                                resolve(allData);
+                            }
                         } else {
-                            resolve(allData);
+                            console.error('Response is undefined');
                         }
-                    });
+                    });                    
                 }, 1500);
             });
         }

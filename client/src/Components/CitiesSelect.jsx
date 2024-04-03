@@ -1,23 +1,48 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
+
+import { addSelectedCity, removeSelectedCity, clearSelectedCities } from "../Store/selectedCitiesSlice";
 
 function CitiesSelect() {
+    const dispatch = useDispatch();
+    const cities = useSelector(state => state.cities.cities);
+
+    useEffect(() => {
+        dispatch(clearSelectedCities());
+    }, []);
+
+
+    function handleChange(city) {
+        if (document.getElementById(city.wikiDataId).checked){
+            dispatch(addSelectedCity(city));
+        }
+        else{
+            dispatch(removeSelectedCity(city));
+        }
+    }
+
     return (
-        <div className="carSlct deliManage">
+        <div className="citySlct deliManage">
             <fieldset>
                 <div className="header">
                     Населённые пункты
                 </div>
-                <div className="inputChkbox">
-                    <input type="checkbox" name='city' id='city1' />
-                    <label for='city1'>1</label>
-                </div>
-                <div className="inputChkbox">
-                    <input type="checkbox" name='city' id='city2' />
-                    <label for='city2'>2</label>
-                </div>
-                <div className="inputChkbox">
-                    <input type="checkbox" name='city' id='city3' />
-                    <label for='city3'>3</label>
+                <div className="cities">
+                    {
+                        cities.map((city) => (
+                            <div key={city.id} className="inputChkbox">
+                                <input type="checkbox" name='city' id={city.wikiDataId} onChange={() => handleChange({
+                                    id: city.id,
+                                    name: city.name,
+                                    longitude: city.longitude,
+                                    latitude: city.latitude,
+                                    wikiDataId: city.wikiDataId
+                                })} />
+                                <label for={city.wikiDataId}>{city.name}</label>
+                            </div>
+                        ))
+                    }
                 </div>
             </fieldset>
         </div>
