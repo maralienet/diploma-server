@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 function RouteCities() {
     const selectedCities = useSelector(state => state.selectedCities.selectedCities);
     return (
-        <div className="citySlct deliManage">
+        <div className="routes deliManage">
             <fieldset>
                 <div className="header">
                     Маршрут
@@ -18,6 +18,7 @@ function RouteCities() {
                                 </li>
                             ))
                         }
+                        {selectedCities[0] && <li>{selectedCities[0].name}</li>}
                     </ol>
                 </div>
             </fieldset>

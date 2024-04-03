@@ -9,15 +9,15 @@ function CitiesSelect() {
     const cities = useSelector(state => state.cities.cities);
 
     useEffect(() => {
-        dispatch(clearSelectedCities());
-    }, []);
-
+        let checks = Array.from(document.getElementsByClassName('citySelect'));
+        checks.forEach((item) => item.checked = false)
+    });
 
     function handleChange(city) {
-        if (document.getElementById(city.wikiDataId).checked){
+        if (document.getElementById(city.wikiDataId).checked) {
             dispatch(addSelectedCity(city));
         }
-        else{
+        else {
             dispatch(removeSelectedCity(city));
         }
     }
@@ -32,7 +32,7 @@ function CitiesSelect() {
                     {
                         cities.map((city) => (
                             <div key={city.id} className="inputChkbox">
-                                <input type="checkbox" name='city' id={city.wikiDataId} onChange={() => handleChange({
+                                <input type="checkbox" className="citySelect" name='city' id={city.wikiDataId} onChange={() => handleChange({
                                     id: city.id,
                                     name: city.name,
                                     longitude: city.longitude,

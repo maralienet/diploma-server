@@ -5,10 +5,17 @@ import './index.scss';
 function App() {
   return (
     <>
-      <MainManage />
-      <>
-        <MainMap/>
-      </>
+      <header>
+
+      </header>
+      <div className='mainPage'>
+        <aside>
+          <MainManage />
+        </aside>
+        <main>
+          <MainMap />
+        </main>
+      </div>
     </>
   );
 }

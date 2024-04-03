@@ -6,15 +6,13 @@ import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
 
 import { addCity, clearCities } from "../Store/citiesSlice";
-
-
+import { addSelectedCity, removeSelectedCity, clearSelectedCities } from "../Store/selectedCitiesSlice";
+import { draw, clear } from "../Store/drawRouteSlice";
 
 function MainMap() {
     return (
         <YMaps>
-            <div>
-                <InnerMap />
-            </div>
+            <div><InnerMap /></div>
         </YMaps>
     );
 }
@@ -23,8 +21,11 @@ export default MainMap;
 
 function InnerMap() {
     const selectedCities = useSelector(state => state.selectedCities.selectedCities);
+    const drawRoute = useSelector(state => state.drawRoute.drawRoute);
     const [cities, setCities] = useState(null);
+    const [city, setCity] = useState(null);
     const [ymaps, setYMaps] = useState(null);
+    const [ready, setReady] = useState(false);
     const mapRef = useRef(null);
     const [placemarkGeometry, setPlacemarkGeometry] = React.useState(null);
     const [placemarkProperties, setPlacemarkProperties] = React.useState({
@@ -50,6 +51,7 @@ function InnerMap() {
             const ymaps = window.ymaps;
             setYMaps(window.ymaps)
             ymaps.ready(() => {
+                setReady(true);
             });
         }).catch((error) => {
             console.error('Ошибка при загрузке Yandex Maps:', error);
@@ -57,11 +59,57 @@ function InnerMap() {
     }, []);
 
     useEffect(() => {
-        if (cities){
+        if (ready) {
+            if (drawRoute && selectedCities.length > 0 && mapRef.current) {
+                let refs = selectedCities.map(city => [city.latitude, city.longitude]);
+                refs.push([selectedCities[0].latitude, selectedCities[0].longitude]);
+
+                let multiRoute = new ymaps.multiRouter.MultiRoute({
+                    referencePoints: refs
+                }, {
+                    boundsAutoApply: true
+                });
+
+                mapRef.current.geoObjects.each(function (geoObject) {
+                    if (geoObject instanceof ymaps.multiRouter.MultiRoute) {
+                        mapRef.current.geoObjects.remove(geoObject);
+                    }
+                });
+                mapRef.current.geoObjects.add(multiRoute);
+            }
+            if(!drawRoute && selectedCities.length > 0 && mapRef.current){
+                mapRef.current.geoObjects.each(function (geoObject) {
+                    if (geoObject instanceof ymaps.multiRouter.MultiRoute) {
+                        mapRef.current.geoObjects.remove(geoObject);
+                    }
+                    if (geoObject instanceof ymaps.Placemark) {
+                        mapRef.current.geoObjects.remove(geoObject);
+                        setPlacemarkGeometry(null);
+                        setPlacemarkProperties({
+                            iconCaption: 'поиск...',
+                            balloonContent: ''
+                        });
+                    }
+                });
+                mapRef.current.setCenter([53.902284, 27.561831], 7);
+            }
+        }
+    }, [ready, drawRoute, selectedCities]);
+
+    useEffect(() => {
+        if (cities) {
             dispatch(clearCities());
             cities.forEach(city => dispatch(addCity(city)));
         }
     }, [cities]);
+
+    useEffect(() => {
+        if (city) {
+            dispatch(clearSelectedCities());
+            dispatch(addSelectedCity(city));
+            dispatch(clear());
+        }
+    }, [city]);
 
     const handleMapClick = (e) => {
         const coords = e.get('coords');
@@ -89,6 +137,10 @@ function InnerMap() {
             if (locality[0]) {
                 let city = locality[0];
                 if (city) {
+                    getCityInfo(city).then(cityInfo => {
+                        setCity(cityInfo);
+                        console.log(cityInfo);
+                    });
                     getCityCode(city).then((wikiDataId) => {
                         if (wikiDataId != -1) {
                             let cits;
@@ -102,13 +154,13 @@ function InnerMap() {
                                 }));
                                 cits.sort(function (a, b) {
                                     if (a.name < b.name) {
-                                      return -1;
+                                        return -1;
                                     }
                                     if (a.name > b.name) {
-                                      return 1;
+                                        return 1;
                                     }
                                     return 0;
-                                  });
+                                });
                                 setCities(cits);
                             });
                         }
@@ -136,6 +188,32 @@ function InnerMap() {
                 console.error(error);
             });
     }
+
+    async function getCityInfo(cityName) {
+        const wikiDataId = await getCityCode(cityName);
+        if (wikiDataId != -1) {
+            try {
+                const response = await axios.get(`https://wft-geo-db.p.rapidapi.com/v1/geo/cities/${wikiDataId}`, {
+                    params: { languageCode: 'ru' },
+                    headers: {
+                        'X-RapidAPI-Key': '544ab5c1d1msh21eb38ee3d08c9ap1c3972jsn80695f100c3d',
+                        'X-RapidAPI-Host': 'wft-geo-db.p.rapidapi.com'
+                    }
+                });
+                let res = {
+                    id: response.data.data.id,
+                    name: response.data.data.name,
+                    longitude: response.data.data.longitude,
+                    latitude: response.data.data.latitude,
+                    wikiDataId: response.data.data.wikiDataId
+                };
+                return res;
+            } catch (error) {
+                console.error(error);
+            }
+        }
+    }
+
 
     function findNearCities(url) {
         return axios.get(url, {
@@ -174,7 +252,7 @@ function InnerMap() {
                         } else {
                             console.error('Response is undefined');
                         }
-                    });                    
+                    });
                 }, 1500);
             });
         }
