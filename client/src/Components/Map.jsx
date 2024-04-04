@@ -6,12 +6,13 @@ import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
 
 import { addCity, clearCities } from "../Store/citiesSlice";
-import { addSelectedCity, removeSelectedCity, clearSelectedCities } from "../Store/selectedCitiesSlice";
-import { draw, clear } from "../Store/drawRouteSlice";
+import { addSelectedCity, clearSelectedCities } from "../Store/selectedCitiesSlice";
+import { clear } from "../Store/drawRouteSlice";
+import { addDetail, removeDetail, clearDetails } from "../Store/routeDetailsSlice";
 
 function MainMap() {
     return (
-        <YMaps>
+        <YMaps query={{ apikey: '' }}>
             <div><InnerMap /></div>
         </YMaps>
     );
@@ -76,8 +77,16 @@ function InnerMap() {
                     }
                 });
                 mapRef.current.geoObjects.add(multiRoute);
+                console.log(multiRoute)
+                multiRoute.model.events.add('requestsuccess', function () {
+                    let length = multiRoute.model.getRoutes()[0].properties.get('distance').text;
+                    dispatch(addDetail({ key: 'length', value: length }))
+
+                    let duration = multiRoute.model.getRoutes()[0].properties.get('duration').text;
+                    dispatch(addDetail({ key: 'duration', value: duration }))
+                });
             }
-            if(!drawRoute && selectedCities.length > 0 && mapRef.current){
+            if (!drawRoute && selectedCities.length > 0 && mapRef.current) {
                 mapRef.current.geoObjects.each(function (geoObject) {
                     if (geoObject instanceof ymaps.multiRouter.MultiRoute) {
                         mapRef.current.geoObjects.remove(geoObject);
@@ -102,6 +111,13 @@ function InnerMap() {
             cities.forEach(city => dispatch(addCity(city)));
         }
     }, [cities]);
+
+    useEffect(() => {
+        if (!drawRoute) {
+            dispatch(clearSelectedCities());
+            dispatch(clearCities());
+        }
+    }, [drawRoute]);
 
     useEffect(() => {
         if (city) {

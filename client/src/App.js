@@ -1,3 +1,4 @@
+import Details from './Components/Details';
 import MainManage from './Components/MainManage';
 import MainMap from './Components/Map';
 import './index.scss';
@@ -14,6 +15,7 @@ function App() {
         </aside>
         <main>
           <MainMap />
+          <Details/>
         </main>
       </div>
     </>
