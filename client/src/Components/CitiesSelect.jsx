@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
 
-import { addSelectedCity, removeSelectedCity, clearSelectedCities } from "../Store/selectedCitiesSlice";
+import { addSelectedCity, removeSelectedCity } from "../Store/selectedCitiesSlice";
 
 function CitiesSelect() {
     const dispatch = useDispatch();

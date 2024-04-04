@@ -77,7 +77,6 @@ function InnerMap() {
                     }
                 });
                 mapRef.current.geoObjects.add(multiRoute);
-                console.log(multiRoute)
                 multiRoute.model.events.add('requestsuccess', function () {
                     let length = multiRoute.model.getRoutes()[0].properties.get('distance').text;
                     dispatch(addDetail({ key: 'length', value: length }))

@@ -8,12 +8,10 @@ const drawRouteSlice = createSlice({
     reducers: {
         draw(state, action) {
             state.drawRoute = true;
-            console.log(state.drawRoute)
         },
 
         clear(state,action){
             state.drawRoute = false;
-            console.log(state.drawRoute)
         }
     }
 })
