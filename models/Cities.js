@@ -4,13 +4,25 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.STRING,
             allowNull: false
         },
-        type:{
+        district:{
             type: DataTypes.STRING,
             allowNull: false
         
         },
         region:{
             type: DataTypes.STRING,
+            allowNull: false
+        },
+        wikiDataId:{
+            type: DataTypes.STRING,
+            allowNull: false
+        },
+        latitude:{
+            type: DataTypes.INTEGER,
+            allowNull: false
+        },
+        longitude:{
+            type: DataTypes.INTEGER,
             allowNull: false
         }
     })

@@ -1,16 +1,16 @@
 const express = require('express');
 const router = express.Router();
 
-const { Cities } = require('../models');
+const { Cars } = require('../models');
 
 router.get('/', async (req, res) => {
-    const CitiesList = await Cities.findAll();
-    res.json(CitiesList);
+    const CarsList = await Cars.findAll();
+    res.json(CarsList);
 });
 
 router.post('/', async (req, res) => {
-    const city = req.body;
-    await Cities.create(city);
+    const car = req.body;
+    await Cars.create(car);
     res.json('ok');
 })
 
