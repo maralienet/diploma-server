@@ -11,7 +11,7 @@ router.get('/', async (req, res) => {
 router.post('/', async (req, res) => {
     const car = req.body;
     await Cars.create(car);
-    res.json('ok');
+    res.json(user);
 })
 
 module.exports = router;
