@@ -14,6 +14,8 @@ const carsRouter = require('./routes/Cars');
 app.use('/cars', carsRouter);
 const usersRouter = require('./routes/Users');
 app.use('/users', usersRouter);
+const routingsRouter = require('./routes/Routings');
+app.use('/routings', routingsRouter);
 
 db.sequelize.sync().then(() => {
     app.listen(3001, () => {
