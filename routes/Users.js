@@ -31,10 +31,10 @@ router.post("/", async (req, res) => {
 
 router.put('/:id', async (req, res) => {
     const { id } = req.params;
-    const { name,surname } = req.body;
+    const { name, surname, role } = req.body;
     const item = await Users.findByPk(id);
 
-    const updatedItem = await item.update({ name,surname });
+    const updatedItem = await item.update({ name, surname, role });
     return res.json(updatedItem);
 });
 
