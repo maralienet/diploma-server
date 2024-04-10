@@ -17,7 +17,7 @@ router.get('/', async (req, res) => {
 router.post('/', async (req, res) => {
     const route = req.body;
     await Routings.create(route);
-    res.json(user);
+    res.json(route);
 })
 
 module.exports = router;
