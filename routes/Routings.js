@@ -42,6 +42,13 @@ router.get("/byroute", async (req, res) => {
     res.json(result);
 });
 
+router.get("/codes", async (req, res) => {
+    const [result, metadata] = await Routings.sequelize.query(`
+    select routeId from routings group by routeId;
+    `);
+    res.json(result);
+});
+
 router.post('/', async (req, res) => {
     const route = req.body;
     await Routings.create(route);
