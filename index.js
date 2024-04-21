@@ -17,6 +17,9 @@ app.use('/users', usersRouter);
 const routingsRouter = require('./routes/Routings');
 app.use('/routings', routingsRouter);
 
+const PdfRouter = require('./routes/Pdf');
+app.use('/pdf', PdfRouter);
+
 db.sequelize.sync().then(() => {
     app.listen(3001, () => {
         console.log('server started on 3001');
