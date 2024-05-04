@@ -1,26 +1,31 @@
 const express = require('express');
 const router = express.Router();
-
-const { Cities } = require('../models');
+const db = require('../db');
 
 router.get('/', async (req, res) => {
-    const CitiesList = await Cities.findAll();
-    res.json(CitiesList);
+    const cities = await await db.query('select * from cities');
+    res.json(cities.rows);
 });
 
 router.post('/', async (req, res) => {
-    const city = req.body;
-    await Cities.create(city);
-    res.json('ok');
+    const { name, region, district, wikiDataId, latitude, longitude } = req.body;
+    let moment = require('moment');
+    const createdAt = moment().format('YYYY-MM-DD HH:mm:ss');
+    const city = await db.query(`insert into cities (name, region, district, "wikiDataId", latitude, longitude, "createdAt") 
+    values ('${name}','${region}','${district}','${wikiDataId}',${latitude},${longitude},'${createdAt}')`);
+    res.json(city.rows[0]);
 })
 
 router.put('/:id', async (req, res) => {
     const { id } = req.params;
-    const { latitude,longitude,district } = req.body;
-    const item = await Cities.findByPk(id);
-
-    const updatedItem = await item.update({ latitude,longitude,district });
-    return res.json(updatedItem);
-})
+    const { region, district, latitude, longitude, } = req.body;
+    const current = await db.query(`select * from cities where id=${id}`);
+    const newRegion = region ? region : current.rows[0].region;
+    const newDistrict = district ? district : current.rows[0].district;
+    const newLatitude = latitude ? latitude : current.rows[0].latitude;
+    const newLongitude = longitude ? longitude : current.rows[0].longitude;
+    const city = await db.query(`update users set latitude = ${newLatitude}, longitude = ${newLongitude}, region='${newRegion}', district='${newDistrict}' where id=${id} RETURNING *`);
+    return res.json(city.rows[0]);
+});
 
 module.exports = router;

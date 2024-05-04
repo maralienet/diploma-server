@@ -1,28 +1,22 @@
 const express = require('express');
 const router = express.Router();
-const Sequelize = require('sequelize');
+const db = require('../db');
 const puppeteer = require('puppeteer');
 
-const { Routings } = require('../models');
-
 function formatDate(date) {
-    var dd = date.getDate();
-    if (dd < 10) dd = '0' + dd;
-    var mm = date.getMonth() + 1;
-    if (mm < 10) mm = '0' + mm;
-    var yy = date.getFullYear();
-    return dd + '.' + mm + '.' + yy;
+    let moment = require('moment');
+    return moment(date).format('DD.MM.YYYY');
 }
 
 router.get('/cars/period/:from/:to', async (req, res) => {
     let { from, to } = req.params;
-    let data = await Routings.sequelize.query(`
-    select concat(brand,' (',gosNumber,')') as Машина, count(*) as 'Проехано маршрутов',sum(length) as 'Всего км', group_concat(routeId SEPARATOR '<br/>') as Маршруты
+    let result = await db.query(`
+    select concat(brand,' (',"gosNumber",')') as Машина, count(*) as "Проехано маршрутов", sum(length) as "Всего км", string_agg(cast("routeId" as text), '<br/>') as "Маршруты"
     from routings
-    join cars on cars.id=routings.carId
-    where routings.createdAt >= '${from}' and routings.createdAt < date_add('${to}', interval 1 day)
-    group by carId;`,
-        { type: Sequelize.QueryTypes.SELECT });
+    join cars on cars.id=routings."carId"
+    where routings."createdAt" >= '${from}' and routings."createdAt" < '${to}'::date + interval '1 day'
+    group by "carId", brand, "gosNumber"`);
+    let data = result.rows;
 
     if (!data[0]) {
         res.status(404).json({ error: 'Данных за этот период нет' });
@@ -175,18 +169,18 @@ router.get('/cars/period/:from/:to', async (req, res) => {
     res.download('out.pdf');
 });
 router.get('/cars/month', async (req, res) => {
-    let data = await Routings.sequelize.query(`
-    select concat(brand,' (',gosNumber,')') as Машина, count(*) as 'Проехано маршрутов',sum(length) as 'Всего км', group_concat(routeId SEPARATOR '<br/>') as Маршруты
+    let result = await db.query(`
+    select concat(brand,' (',"gosNumber",')') as "Машина", count(*) as "Проехано маршрутов", sum(length) as "Всего км", string_agg(cast("routeId" as text), '<br/>') as "Маршруты"
     from routings
-    join cars on cars.id=routings.carId
-    where month(routings.createdAt) = month(now())
-    group by carId;`,
-        { type: Sequelize.QueryTypes.SELECT });
-
+    join cars on cars.id=routings."carId"
+    where extract(month from routings."createdAt") = extract(month from current_date)
+    group by "carId", brand, "gosNumber"`);
+    let data = result.rows;
     if (!data[0]) {
         res.status(404).json({ error: 'Данных за этот период нет' });
         return;
     }
+
     let headers = Object.keys(data[0]);
     let body = [];
     body.push(headers);
@@ -337,14 +331,13 @@ router.get('/cars/month', async (req, res) => {
 
 router.get('/routes/period/:from/:to', async (req, res) => {
     let { from, to } = req.params;
-    let data = await Routings.sequelize.query(`
-    select DATE_FORMAT(date(routings.createdAt),'%d.%m.%Y') as Дата, routeId as Код,group_concat(concat(brand,' (',gosNumber,')') separator '<br/>') as Грузовики,route as Путь,length as Протяжённость
+    let result = await db.query(`
+    select to_char(date(routings."createdAt"),'DD.MM.YYYY') as "Дата", "routeId" as "Код", string_agg(concat(brand,' (',"gosNumber",')'), '<br/>') as "Грузовики", route as "Путь", length as "Протяжённость"
     from routings
-    join cars on cars.id=routings.carId
-    where routings.createdAt >= '${from}' and routings.createdAt < date_add('${to}', interval 1 day)
-    group by routeId,route,length,routings.createdAt;`,
-        { type: Sequelize.QueryTypes.SELECT });
-
+    join cars on cars.id=routings."carId"
+    where routings."createdAt" >= '${from}' and routings."createdAt" < '${to}'::date + interval '1 day'
+    group by "routeId", route, length, date(routings."createdAt")`);
+    let data = result.rows;
     if (!data[0]) {
         res.status(404).json({ error: 'Данных за этот период нет' });
         return;
@@ -496,14 +489,17 @@ router.get('/routes/period/:from/:to', async (req, res) => {
     res.download('out.pdf');
 });
 router.get('/routes/month', async (req, res) => {
-    let data = await Routings.sequelize.query(`
-    select DATE_FORMAT(date(routings.createdAt),'%d.%m.%Y') as Дата, routeId as Код,group_concat(concat(brand,' (',gosNumber,')') separator '<br/>') as Грузовики,route as Путь,length as Протяжённость
+    let result = await db.query(`
+    select to_char(date(routings."createdAt"), 'DD.MM.YYYY') as "Дата", 
+    "routeId" as "Код", 
+    string_agg(concat(brand,' (',"gosNumber",')'), '<br/>') as "Грузовики", 
+    route as "Путь", 
+    length as "Протяжённость"
     from routings
-    join cars on cars.id=routings.carId
-    where month(routings.createdAt) = month(now())
-    group by routeId,route,length,routings.createdAt;`,
-        { type: Sequelize.QueryTypes.SELECT });
-
+    join cars on cars.id = routings."carId"
+    where extract(month from routings."createdAt") = extract(month from current_date)
+    group by "routeId", route, length, routings."createdAt";`);
+    let data = result.rows;
     if (!data[0]) {
         res.status(404).json({ error: 'Данных за этот период нет' });
         return;

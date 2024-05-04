@@ -29,24 +29,33 @@ router.get("/maxid", async (req, res) => {
     where id=(select max(id) from users) 
 	order by id desc limit 1
     `);
-    res.json(userWithMaxId);
+    res.json(userWithMaxId.rows[0]);
 });
 
 router.post("/", async (req, res) => {
     const { name, surname, login, password, role } = req.body;
-    const createdAt = new Date().toJSON();
-    const createdUser = await db.query(`insert into users values ()`);
-    res.json(createdUser);
+    let moment = require('moment');
+    const createdAt = moment().format('YYYY-MM-DD HH:mm:ss');
+    const createdUser = await db.query(`insert into users (name, surname, login, password, role, "createdAt") 
+    values ('${name}','${surname}','${login}','${password}',${role},'${createdAt}')`);
+    res.json(createdUser.rows[0]);
 });
 
-// router.put('/:id', async (req, res) => {
-//     const { id } = req.params;
-//     const { name, surname, role } = req.body;
-//     const item = await Users.findByPk(id);
+router.put('/:id', async (req, res) => {
+    const { id } = req.params;
+    const { name, surname, role } = req.body;
+    const currentUser = await db.query(`select * from users where id=${id}`);
+    const newName = name ? name : currentUser.rows[0].name;
+    const newSurname = surname ? surname : currentUser.rows[0].surname;
+    const newRole = role ? role : currentUser.rows[0].role;
+    const user = await db.query(`update users set name = '${newName}', surname='${newSurname}', role=${newRole} where id=${id} RETURNING *`);
+    return res.json(user.rows[0]);
+});
 
-//     const updatedItem = await item.update({ name, surname, role });
-//     return res.json(updatedItem);
-// });
-
+router.delete('/:id', async (req, res) => {
+    const { id } = req.params;
+    const user = await db.query(`update users set available='false' where id=${id}`);
+    return res.json(user.rows[0]);
+});
 
 module.exports = router;
