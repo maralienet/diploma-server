@@ -39,7 +39,7 @@ router.get("/bycar/:id", async (req, res) => {
     from routings where "carId"=${id}
     group by "carId";
     `);
-    res.json(routings.rows[0]);
+    res.json(routings.rows);
 });
 
 router.get("/byroute", async (req, res) => {
@@ -64,7 +64,7 @@ router.post('/', async (req, res) => {
     const createdAt = moment().format('YYYY-MM-DD HH:mm:ss');
     const createdRoute = await db.query(`insert into users ("routeId", "carId", route, length, duration, "createdAt") 
     values ('${routeId}',${carId},'${route}',${length},'${duration}','${createdAt}')`);
-    res.json(createdRoute.rows[0]);
+    res.json(createdRoute.rows);
 })
 
 module.exports = router;

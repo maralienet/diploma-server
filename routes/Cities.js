@@ -13,7 +13,7 @@ router.post('/', async (req, res) => {
     const createdAt = moment().format('YYYY-MM-DD HH:mm:ss');
     const city = await db.query(`insert into cities (name, region, district, "wikiDataId", latitude, longitude, "createdAt") 
     values ('${name}','${region}','${district}','${wikiDataId}',${latitude},${longitude},'${createdAt}')`);
-    res.json(city.rows[0]);
+    res.json(city.rows);
 })
 
 router.put('/:id', async (req, res) => {
@@ -25,7 +25,7 @@ router.put('/:id', async (req, res) => {
     const newLatitude = latitude ? latitude : current.rows[0].latitude;
     const newLongitude = longitude ? longitude : current.rows[0].longitude;
     const city = await db.query(`update users set latitude = ${newLatitude}, longitude = ${newLongitude}, region='${newRegion}', district='${newDistrict}' where id=${id} RETURNING *`);
-    return res.json(city.rows[0]);
+    return res.json(city.rows);
 });
 
 module.exports = router;

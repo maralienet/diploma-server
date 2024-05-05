@@ -5,7 +5,6 @@ const cors = require('cors');
 app.use(express.json());
 app.use(cors());
 
-const db = require('./models');
 
 //роутеры
 const citiesRouter = require('./routes/Cities');
@@ -16,12 +15,12 @@ const usersRouter = require('./routes/Users');
 app.use('/users', usersRouter);
 const routingsRouter = require('./routes/Routings');
 app.use('/routings', routingsRouter);
+const routingsScedule = require('./routes/Scedule');
+app.use('/scedules', routingsScedule);
 
 const PdfRouter = require('./routes/Pdf');
 app.use('/pdf', PdfRouter);
 
-db.sequelize.sync().then(() => {
-    app.listen(3001, () => {
-        console.log('server started on 3001');
-    });
+app.listen(3001, () => {
+    console.log('server started on 3001');
 });

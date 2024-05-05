@@ -17,7 +17,6 @@ router.get("/", async (req, res) => {
             i++;
         }
         queryText = queryText.slice(0, -5);
-
         users = await db.query(queryText, queryParams);
     }
     res.json(users.rows);
@@ -29,7 +28,7 @@ router.get("/maxid", async (req, res) => {
     where id=(select max(id) from users) 
 	order by id desc limit 1
     `);
-    res.json(userWithMaxId.rows[0]);
+    res.json(userWithMaxId.rows);
 });
 
 router.post("/", async (req, res) => {
@@ -38,7 +37,7 @@ router.post("/", async (req, res) => {
     const createdAt = moment().format('YYYY-MM-DD HH:mm:ss');
     const createdUser = await db.query(`insert into users (name, surname, login, password, role, "createdAt") 
     values ('${name}','${surname}','${login}','${password}',${role},'${createdAt}')`);
-    res.json(createdUser.rows[0]);
+    res.json(createdUser.rows);
 });
 
 router.put('/:id', async (req, res) => {
@@ -49,13 +48,13 @@ router.put('/:id', async (req, res) => {
     const newSurname = surname ? surname : currentUser.rows[0].surname;
     const newRole = role ? role : currentUser.rows[0].role;
     const user = await db.query(`update users set name = '${newName}', surname='${newSurname}', role=${newRole} where id=${id} RETURNING *`);
-    return res.json(user.rows[0]);
+    return res.json(user.rows);
 });
 
 router.delete('/:id', async (req, res) => {
     const { id } = req.params;
     const user = await db.query(`update users set available='false' where id=${id}`);
-    return res.json(user.rows[0]);
+    return res.json(user.rows);
 });
 
 module.exports = router;
