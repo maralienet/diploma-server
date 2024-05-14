@@ -42,13 +42,23 @@ router.get("/bycar/:id", async (req, res) => {
     res.json(routings.rows);
 });
 
+
 router.get("/byroute", async (req, res) => {
     const routings = await db.query(`
-    select "routeId",string_agg(cast("carId" as text), ',') as cars,route,length
+    select "routeId",string_agg(cast("carId" as text), ',') as cars,route,length,weight,duration
     from routings
-    group by "routeId",route,length;
+    group by "routeId",route,length,weight,duration;
     `);
     res.json(routings.rows);
+});
+
+router.get("/lastRouteByCar/:id", async (req, res) => {
+    const { id } = req.params;
+    const routings = await db.query(`
+    select max(id) as maxi from routings
+    where "carId"=${id};
+    `);
+    res.json(routings.rows[0].maxi);
 });
 
 router.get("/codes", async (req, res) => {
@@ -59,12 +69,12 @@ router.get("/codes", async (req, res) => {
 });
 
 router.post('/', async (req, res) => {
-    const {routeId, carId, route, length, duration} = req.body;
+    const {routeId, carId, route, length, duration, userId, weight} = req.body;
     let moment = require('moment');
     const createdAt = moment().format('YYYY-MM-DD HH:mm:ss');
-    const createdRoute = await db.query(`insert into users ("routeId", "carId", route, length, duration, "createdAt") 
-    values ('${routeId}',${carId},'${route}',${length},'${duration}','${createdAt}')`);
-    res.json(createdRoute.rows);
+    const createdRoute = await db.query(`insert into routings ("routeId", "carId", route, length, duration, "createdAt","userId",weight) 
+    values ('${routeId}',${carId},'${route}',${length},'${duration}','${createdAt}',${userId}, ${weight})`);
+    res.json(createdRoute.rows[0]);
 })
 
 module.exports = router;

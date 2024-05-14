@@ -16,7 +16,7 @@ app.use('/users', usersRouter);
 const routingsRouter = require('./routes/Routings');
 app.use('/routings', routingsRouter);
 const routingsScedule = require('./routes/Scedule');
-app.use('/scedules', routingsScedule);
+app.use('/scedule', routingsScedule);
 
 const PdfRouter = require('./routes/Pdf');
 app.use('/pdf', PdfRouter);
