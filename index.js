@@ -4,7 +4,9 @@ const cors = require('cors');
 require('dotenv').config();
 
 app.use(express.json());
-app.use(cors());
+app.use(cors({
+    origin: 'https://logistics-rihb.onrender.com'
+  }));
 
 //роутеры
 const citiesRouter = require('./routes/Cities');
