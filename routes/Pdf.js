@@ -160,12 +160,14 @@ router.get('/cars/period/:from/:to', async (req, res) => {
     </body>
     </html>
     `;
-
     const browser = await puppeteer.launch();
     const page = await browser.newPage();
     await page.setContent(html);
     await page.pdf({ path: 'out.pdf', format: 'A4' });
     await browser.close();
+    res.setHeader('Access-Control-Allow-Origin', 'https://logistics-rihb.onrender.com');
+    res.setHeader('Access-Control-Allow-Methods', 'GET');
+    res.setHeader('Content-Type', 'application/pdf');
     res.download('out.pdf');
 });
 router.get('/cars/month', async (req, res) => {
