@@ -327,7 +327,15 @@ router.get('/cars/month', async (req, res) => {
     </html>
     `;
 
-    const browser = await puppeteer.launch();
+    const browser = await puppeteer.launch({
+        args: [
+          "--disable-setuid-sandbox",
+          "--no-sandbox",
+          "--single-process",
+          "--no-zygote",
+        ],
+        executablePath: puppeteer.executablePath()
+    });
     const page = await browser.newPage();
     await page.setContent(html);
     await page.pdf({ path: 'out.pdf', format: 'A4' });
