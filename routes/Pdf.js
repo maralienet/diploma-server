@@ -8,6 +8,11 @@ function formatDate(date) {
     return moment(date).format('DD.MM.YYYY');
 }
 
+
+router.get('/',async (req,res)=>{
+    res.json('aaa')
+})
+
 router.get('/cars/period/:from/:to', async (req, res) => {
     let { from, to } = req.params;
     let result = await db.query(`
