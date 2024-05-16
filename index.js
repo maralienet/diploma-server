@@ -5,8 +5,14 @@ require('dotenv').config();
 
 app.use(express.json());
 app.use(cors({
-    origin: 'https://logistics-rihb.onrender.com'
-  }));
+  origin: 'https://logistics-rihb.onrender.com'
+}));
+
+app.use((req, res, next) => {
+  res.setHeader('Access-Control-Allow-Origin', 'https://logistics-rihb.onrender.com');
+  res.setHeader('Access-Control-Allow-Methods', 'GET');
+  next();
+});
 
 //роутеры
 const citiesRouter = require('./routes/Cities');
@@ -24,5 +30,5 @@ const PdfRouter = require('./routes/Pdf');
 app.use('/pdf', PdfRouter);
 
 app.listen(5001, () => {
-    console.log('server started on 5001');
+  console.log('server started on 5001');
 });
