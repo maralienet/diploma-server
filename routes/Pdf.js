@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const db = require('../db');
 const puppeteer = require('puppeteer');
+const fs = require('fs');
 
 function formatDate(date) {
     let moment = require('moment');
@@ -335,10 +336,8 @@ router.get('/cars/month', async (req, res) => {
     //             ? process.env.PUPPETEER_EXECUTABLE_PATH
     //             : puppeteer.executablePath(),
     // });
-    const browser = await puppeteer.launch({
-        executablePath: '/usr/bin/google-chrome-stable',
-        args: ['--no-sandbox', '--disable-setuid-sandbox']
-      });
+    const chromiumPath = fs.readFileSync('/chromium-path.txt', 'utf8').trim();
+    const browser = await puppeteer.launch({ executablePath: chromiumPath });
     const page = await browser.newPage();
     await page.setContent(html);
     await page.pdf({ path: 'out.pdf', format: 'A4' });
