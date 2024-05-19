@@ -1,4 +1,5 @@
 FROM ghcr.io/puppeteer/puppeteer:22.6.5
+ENV PUPPETEER_CACHE_DIR=/opt/render/.cache/puppeteer
 WORKDIR /usr/src/app
 COPY package*.json ./
 RUN npm ci
