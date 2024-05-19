@@ -8,11 +8,6 @@ function formatDate(date) {
     return moment(date).format('DD.MM.YYYY');
 }
 
-
-router.get('/',async (req,res)=>{
-    res.json('aaa')
-})
-
 router.get('/cars/period/:from/:to', async (req, res) => {
     let { from, to } = req.params;
     let result = await db.query(`
@@ -165,7 +160,8 @@ router.get('/cars/period/:from/:to', async (req, res) => {
     </body>
     </html>
     `;
-    const browser = await puppeteer.launch();
+
+    const browser = await puppeteer.launch({ executablePath: await puppeteer.executablePath() });
     const page = await browser.newPage();
     await page.setContent(html);
     await page.pdf({ path: 'out.pdf', format: 'A4' });
@@ -327,18 +323,19 @@ router.get('/cars/month', async (req, res) => {
     </html>
     `;
 
-    const browser = await puppeteer.launch({
-        args: [
-          "--disable-setuid-sandbox",
-          "--no-sandbox",
-          "--single-process",
-          "--no-zygote",
-        ],
-        executablePath:
-          process.env.NODE_ENV === "production"
-            ? process.env.PUPPETEER_EXECUTABLE_PATH
-            : puppeteer.executablePath(),
-    });
+    // const browser = await puppeteer.launch({
+    //     args: [
+    //         "--disable-setuid-sandbox",
+    //         "--no-sandbox",
+    //         "--single-process",
+    //         "--no-zygote",
+    //     ],
+    //     executablePath:
+    //         process.env.NODE_ENV === "production"
+    //             ? process.env.PUPPETEER_EXECUTABLE_PATH
+    //             : puppeteer.executablePath(),
+    // });
+    const browser = await puppeteer.launch({ executablePath: await puppeteer.executablePath() });
     const page = await browser.newPage();
     await page.setContent(html);
     await page.pdf({ path: 'out.pdf', format: 'A4' });
