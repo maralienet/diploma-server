@@ -29,6 +29,7 @@ app.use('/scedule', routingsScedule);
 const PdfRouter = require('./routes/Pdf');
 app.use('/pdf', PdfRouter);
 
-app.listen(5001, () => {
+const port = process.env.SERV_PORT || 5001;
+app.listen(port, () => {
   console.log('server started on 5001');
 });
