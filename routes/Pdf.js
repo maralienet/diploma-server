@@ -336,7 +336,7 @@ router.get('/cars/month', async (req, res) => {
     //             ? process.env.PUPPETEER_EXECUTABLE_PATH
     //             : puppeteer.executablePath(),
     // });
-    const pathToExtension = path.join(process.cwd(), 'my-extension');
+    const pathToExtension = path.join(process.cwd(), 'puppeteer');
     const browser = await puppeteer.launch({
         args: [
             `--disable-extensions-except=${pathToExtension}`,
