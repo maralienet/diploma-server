@@ -1,8 +1,8 @@
-import path from 'path';
 const express = require('express');
 const router = express.Router();
 const db = require('../db');
 const puppeteer = require('puppeteer');
+const path = require('path');
 
 function formatDate(date) {
     let moment = require('moment');
