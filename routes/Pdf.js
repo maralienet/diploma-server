@@ -335,7 +335,10 @@ router.get('/cars/month', async (req, res) => {
     //             ? process.env.PUPPETEER_EXECUTABLE_PATH
     //             : puppeteer.executablePath(),
     // });
-    const browser = await puppeteer.launch({ executablePath: '/usr/bin/chromium-browser' });
+    const browser = await puppeteer.launch({
+        executablePath: '/usr/bin/google-chrome-stable',
+        args: ['--no-sandbox', '--disable-setuid-sandbox']
+      });
     const page = await browser.newPage();
     await page.setContent(html);
     await page.pdf({ path: 'out.pdf', format: 'A4' });
