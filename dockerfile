@@ -1,5 +1,5 @@
 FROM puppeteer/puppeteer:latest
-WORKDIR /opt/render/.cache/
+WORKDIR /usr/src/app
 COPY package*.json ./
 RUN npm ci
 COPY . .
