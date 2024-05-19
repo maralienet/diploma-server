@@ -336,8 +336,7 @@ router.get('/cars/month', async (req, res) => {
     //             ? process.env.PUPPETEER_EXECUTABLE_PATH
     //             : puppeteer.executablePath(),
     // });
-    const chromiumPath = fs.readFileSync('/chromium-path.txt', 'utf8').trim();
-    const browser = await puppeteer.launch({ executablePath: chromiumPath });
+    const browser = await puppeteer.launch({ executablePath: '/usr/bin/chromium-browser' });
     const page = await browser.newPage();
     await page.setContent(html);
     await page.pdf({ path: 'out.pdf', format: 'A4' });
