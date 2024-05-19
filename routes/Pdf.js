@@ -323,19 +323,7 @@ router.get('/cars/month', async (req, res) => {
     </body>
     </html>
     `;
-
-    // const browser = await puppeteer.launch({
-    //     args: [
-    //         "--disable-setuid-sandbox",
-    //         "--no-sandbox",
-    //         "--single-process",
-    //         "--no-zygote",
-    //     ],
-    //     executablePath:
-    //         process.env.NODE_ENV === "production"
-    //             ? process.env.PUPPETEER_EXECUTABLE_PATH
-    //             : puppeteer.executablePath(),
-    // });
+    
     const pathToExtension = path.join(process.cwd(), 'puppeteer');
     const browser = await puppeteer.launch({
         args: [
