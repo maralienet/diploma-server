@@ -1,8 +1,8 @@
+import path from 'path';
 const express = require('express');
 const router = express.Router();
 const db = require('../db');
 const puppeteer = require('puppeteer');
-const fs = require('fs');
 
 function formatDate(date) {
     let moment = require('moment');
@@ -336,8 +336,15 @@ router.get('/cars/month', async (req, res) => {
     //             ? process.env.PUPPETEER_EXECUTABLE_PATH
     //             : puppeteer.executablePath(),
     // });
-    const browser = await puppeteer.launch();
+    const pathToExtension = path.join(process.cwd(), 'my-extension');
+    const browser = await puppeteer.launch({
+        args: [
+            `--disable-extensions-except=${pathToExtension}`,
+            `--load-extension=${pathToExtension}`,
+        ],
+    });
     const page = await browser.newPage();
+    page.setUserAgent("Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/95.0.4638.69 Safari/537.36")
     await page.setContent(html);
     await page.pdf({ path: 'out.pdf', format: 'A4' });
     await browser.close();
