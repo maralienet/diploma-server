@@ -6,5 +6,9 @@ WORKDIR /usr/src/app
 COPY package*.json ./
 RUN npm ci
 RUN apt-get update && apt-get install -y chromium-browser
+# Check if Chromium is installed
+RUN which chromium-browser
+# Check Chromium version
+RUN chromium-browser --version
 COPY . .
 CMD ["node","index.js"]
