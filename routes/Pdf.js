@@ -137,7 +137,7 @@ router.get('/cars/period/:from/:to', async (req, res) => {
             <div>
                 <h2>Логистика товаров народного подтребления</h2>
             </div>
-            <div class="logo"><img src="http://localhost:3000/static/media/logo.18919efbba90b2796491.png" /></div>
+            <div class="logo"><img src="https://logistics-rihb.onrender.com/static/media/logo.18919efbba90b2796491.png" /></div>
         </div>
         <div class="body">
             <h3>Отчёт по маршрутам грузовиков</h3>
@@ -302,7 +302,7 @@ router.get('/cars/month', async (req, res) => {
             <div>
                 <h2>Логистика товаров народного подтребления</h2>
             </div>
-            <div class="logo"><img src="http://localhost:3000/static/media/logo.18919efbba90b2796491.png" /></div>
+            <div class="logo"><img src="https://logistics-rihb.onrender.com/static/media/logo.18919efbba90b2796491.png" /></div>
         </div>
         <div class="body">
             <h3>Отчёт по маршрутам грузовиков</h3>
@@ -469,7 +469,7 @@ router.get('/routes/period/:from/:to', async (req, res) => {
             <div>
                 <h2>Логистика товаров народного подтребления</h2>
             </div>
-            <div class="logo"><img src="http://localhost:3000/static/media/logo.18919efbba90b2796491.png" /></div>
+            <div class="logo"><img src="https://logistics-rihb.onrender.com/static/media/logo.18919efbba90b2796491.png" /></div>
         </div>
         <div class="body">
             <h3>Отчёт по маршрутам</h3>
@@ -633,7 +633,7 @@ router.get('/routes/month', async (req, res) => {
             <div>
                 <h2>Логистика товаров народного подтребления</h2>
             </div>
-            <div class="logo"><img src="http://localhost:3000/static/media/logo.18919efbba90b2796491.png" /></div>
+            <div class="logo"><img src="https://logistics-rihb.onrender.com/static/media/logo.18919efbba90b2796491.png" /></div>
         </div>
         <div class="body">
             <h3>Отчёт по маршрутам грузовиков</h3>
@@ -806,7 +806,7 @@ router.get('/logists/period/:from/:to', async (req, res) => {
             <div>
                 <h2>Логистика товаров народного подтребления</h2>
             </div>
-            <div class="logo"><img src="http://localhost:3000/static/media/logo.18919efbba90b2796491.png" /></div>
+            <div class="logo"><img src="https://logistics-rihb.onrender.com/static/media/logo.18919efbba90b2796491.png" /></div>
         </div>
         <div class="body">
             <h3>Отчёт по маршрутам</h3>
@@ -976,7 +976,7 @@ router.get('/logists/month', async (req, res) => {
             <div>
                 <h2>Логистика товаров народного подтребления</h2>
             </div>
-            <div class="logo"><img src="http://localhost:3000/static/media/logo.18919efbba90b2796491.png" /></div>
+            <div class="logo"><img src="https://logistics-rihb.onrender.com/static/media/logo.18919efbba90b2796491.png" /></div>
         </div>
         <div class="body">
             <h3>Отчёт по маршрутам грузовиков</h3>
