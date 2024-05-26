@@ -323,15 +323,15 @@ router.get('/cars/month', async (req, res) => {
     </body>
     </html>
     `;
-    
-    const pathToExtension = path.join(process.cwd(), 'puppeteer');
+
     const browser = await puppeteer.launch({
         args: ['--no-sandbox']
-      });
+    });
     const page = await browser.newPage();
     page.setUserAgent("Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/95.0.4638.69 Safari/537.36")
     await page.setContent(html);
-    await page.pdf({ path: 'out.pdf', format: 'A4' });
+    const pdfPath = '/tmp/out.pdf';
+    await page.pdf({ path: pdfPath, format: 'A4' });
     await browser.close();
     res.setHeader('Access-Control-Allow-Origin', 'https://logistics-rihb.onrender.com');
     res.setHeader('Access-Control-Allow-Methods', 'GET');
