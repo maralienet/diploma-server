@@ -162,11 +162,8 @@ router.get('/cars/period/:from/:to', async (req, res) => {
     </html>
     `;
 
-    const browser = await puppeteer.launch({
-        args: ['--no-sandbox']
-    });
+    const browser = await puppeteer.launch({ args: ['--no-sandbox'] });
     const page = await browser.newPage();
-    page.setUserAgent("Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/95.0.4638.69 Safari/537.36")
     await page.setContent(html);
     const date = new Date();
     const timestamp = date.getTime();
@@ -176,7 +173,7 @@ router.get('/cars/period/:from/:to', async (req, res) => {
     res.setHeader('Access-Control-Allow-Origin', 'https://logistics-rihb.onrender.com');
     res.setHeader('Access-Control-Allow-Methods', 'GET');
     res.setHeader('Content-Type', 'application/pdf');
-    res.download('out.pdf');
+    res.download(pdfPath);
 });
 router.get('/cars/month', async (req, res) => {
     let result = await db.query(`
@@ -330,11 +327,8 @@ router.get('/cars/month', async (req, res) => {
     </html>
     `;
 
-    const browser = await puppeteer.launch({
-        args: ['--no-sandbox']
-    });
+    const browser = await puppeteer.launch({ args: ['--no-sandbox'] });
     const page = await browser.newPage();
-    page.setUserAgent("Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/95.0.4638.69 Safari/537.36")
     await page.setContent(html);
     const date = new Date();
     const timestamp = date.getTime();
@@ -344,7 +338,7 @@ router.get('/cars/month', async (req, res) => {
     res.setHeader('Access-Control-Allow-Origin', 'https://logistics-rihb.onrender.com');
     res.setHeader('Access-Control-Allow-Methods', 'GET');
     res.setHeader('Content-Type', 'application/pdf');
-    res.download('out.pdf');
+    res.download(pdfPath);
 });
 
 
@@ -500,11 +494,8 @@ router.get('/routes/period/:from/:to', async (req, res) => {
     </html>
     `;
 
-    const browser = await puppeteer.launch({
-        args: ['--no-sandbox']
-    });
+    const browser = await puppeteer.launch({ args: ['--no-sandbox'] });
     const page = await browser.newPage();
-    page.setUserAgent("Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/95.0.4638.69 Safari/537.36")
     await page.setContent(html);
     const date = new Date();
     const timestamp = date.getTime();
@@ -514,7 +505,7 @@ router.get('/routes/period/:from/:to', async (req, res) => {
     res.setHeader('Access-Control-Allow-Origin', 'https://logistics-rihb.onrender.com');
     res.setHeader('Access-Control-Allow-Methods', 'GET');
     res.setHeader('Content-Type', 'application/pdf');
-    res.download('out.pdf');
+    res.download(pdfPath);
 });
 router.get('/routes/month', async (req, res) => {
     let result = await db.query(`
@@ -667,11 +658,8 @@ router.get('/routes/month', async (req, res) => {
     </html>
     `;
 
-    const browser = await puppeteer.launch({
-        args: ['--no-sandbox']
-    });
+    const browser = await puppeteer.launch({ args: ['--no-sandbox'] });
     const page = await browser.newPage();
-    page.setUserAgent("Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/95.0.4638.69 Safari/537.36")
     await page.setContent(html);
     const date = new Date();
     const timestamp = date.getTime();
@@ -681,7 +669,7 @@ router.get('/routes/month', async (req, res) => {
     res.setHeader('Access-Control-Allow-Origin', 'https://logistics-rihb.onrender.com');
     res.setHeader('Access-Control-Allow-Methods', 'GET');
     res.setHeader('Content-Type', 'application/pdf');
-    res.download('out.pdf');
+    res.download(pdfPath);
 });
 
 
@@ -843,11 +831,8 @@ router.get('/logists/period/:from/:to', async (req, res) => {
     </html>
     `;
 
-    const browser = await puppeteer.launch({
-        args: ['--no-sandbox']
-    });
+    const browser = await puppeteer.launch({ args: ['--no-sandbox'] });
     const page = await browser.newPage();
-    page.setUserAgent("Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/95.0.4638.69 Safari/537.36")
     await page.setContent(html);
     const date = new Date();
     const timestamp = date.getTime();
@@ -857,7 +842,7 @@ router.get('/logists/period/:from/:to', async (req, res) => {
     res.setHeader('Access-Control-Allow-Origin', 'https://logistics-rihb.onrender.com');
     res.setHeader('Access-Control-Allow-Methods', 'GET');
     res.setHeader('Content-Type', 'application/pdf');
-    res.download('out.pdf');
+    res.download(pdfPath);
 });
 router.get('/logists/month', async (req, res) => {
     let result = await db.query(`
@@ -1016,11 +1001,8 @@ router.get('/logists/month', async (req, res) => {
     </html>
     `;
 
-    const browser = await puppeteer.launch({
-        args: ['--no-sandbox']
-    });
+    const browser = await puppeteer.launch({ args: ['--no-sandbox'] });
     const page = await browser.newPage();
-    page.setUserAgent("Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/95.0.4638.69 Safari/537.36")
     await page.setContent(html);
     const date = new Date();
     const timestamp = date.getTime();
@@ -1030,7 +1012,7 @@ router.get('/logists/month', async (req, res) => {
     res.setHeader('Access-Control-Allow-Origin', 'https://logistics-rihb.onrender.com');
     res.setHeader('Access-Control-Allow-Methods', 'GET');
     res.setHeader('Content-Type', 'application/pdf');
-    res.download('out.pdf');
+    res.download(pdfPath);
 });
 
 module.exports = router;
