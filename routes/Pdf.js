@@ -326,7 +326,6 @@ router.get('/cars/month', async (req, res) => {
     
     const pathToExtension = path.join(process.cwd(), 'puppeteer');
     const browser = await puppeteer.launch({
-        executablePath: '/usr/bin/chromium-browser',
         args: ['--no-sandbox']
       });
     const page = await browser.newPage();
