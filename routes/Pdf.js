@@ -162,10 +162,14 @@ router.get('/cars/period/:from/:to', async (req, res) => {
     </html>
     `;
 
-    const browser = await puppeteer.launch({ executablePath: await puppeteer.executablePath() });
+    const browser = await puppeteer.launch({
+        args: ['--no-sandbox']
+    });
     const page = await browser.newPage();
+    page.setUserAgent("Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/95.0.4638.69 Safari/537.36")
     await page.setContent(html);
-    await page.pdf({ path: 'out.pdf', format: 'A4' });
+    const pdfPath = '/tmp/out.pdf';
+    await page.pdf({ path: pdfPath, format: 'A4' });
     await browser.close();
     res.setHeader('Access-Control-Allow-Origin', 'https://logistics-rihb.onrender.com');
     res.setHeader('Access-Control-Allow-Methods', 'GET');
@@ -492,11 +496,18 @@ router.get('/routes/period/:from/:to', async (req, res) => {
     </html>
     `;
 
-    const browser = await puppeteer.launch();
+    const browser = await puppeteer.launch({
+        args: ['--no-sandbox']
+    });
     const page = await browser.newPage();
+    page.setUserAgent("Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/95.0.4638.69 Safari/537.36")
     await page.setContent(html);
-    await page.pdf({ path: 'out.pdf', format: 'A4' });
+    const pdfPath = '/tmp/out.pdf';
+    await page.pdf({ path: pdfPath, format: 'A4' });
     await browser.close();
+    res.setHeader('Access-Control-Allow-Origin', 'https://logistics-rihb.onrender.com');
+    res.setHeader('Access-Control-Allow-Methods', 'GET');
+    res.setHeader('Content-Type', 'application/pdf');
     res.download('out.pdf');
 });
 router.get('/routes/month', async (req, res) => {
@@ -650,11 +661,18 @@ router.get('/routes/month', async (req, res) => {
     </html>
     `;
 
-    const browser = await puppeteer.launch();
+    const browser = await puppeteer.launch({
+        args: ['--no-sandbox']
+    });
     const page = await browser.newPage();
+    page.setUserAgent("Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/95.0.4638.69 Safari/537.36")
     await page.setContent(html);
-    await page.pdf({ path: 'out.pdf', format: 'A4' });
+    const pdfPath = '/tmp/out.pdf';
+    await page.pdf({ path: pdfPath, format: 'A4' });
     await browser.close();
+    res.setHeader('Access-Control-Allow-Origin', 'https://logistics-rihb.onrender.com');
+    res.setHeader('Access-Control-Allow-Methods', 'GET');
+    res.setHeader('Content-Type', 'application/pdf');
     res.download('out.pdf');
 });
 
@@ -817,11 +835,18 @@ router.get('/logists/period/:from/:to', async (req, res) => {
     </html>
     `;
 
-    const browser = await puppeteer.launch();
+    const browser = await puppeteer.launch({
+        args: ['--no-sandbox']
+    });
     const page = await browser.newPage();
+    page.setUserAgent("Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/95.0.4638.69 Safari/537.36")
     await page.setContent(html);
-    await page.pdf({ path: 'out.pdf', format: 'A4' });
+    const pdfPath = '/tmp/out.pdf';
+    await page.pdf({ path: pdfPath, format: 'A4' });
     await browser.close();
+    res.setHeader('Access-Control-Allow-Origin', 'https://logistics-rihb.onrender.com');
+    res.setHeader('Access-Control-Allow-Methods', 'GET');
+    res.setHeader('Content-Type', 'application/pdf');
     res.download('out.pdf');
 });
 router.get('/logists/month', async (req, res) => {
@@ -981,11 +1006,18 @@ router.get('/logists/month', async (req, res) => {
     </html>
     `;
 
-    const browser = await puppeteer.launch();
+    const browser = await puppeteer.launch({
+        args: ['--no-sandbox']
+    });
     const page = await browser.newPage();
+    page.setUserAgent("Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/95.0.4638.69 Safari/537.36")
     await page.setContent(html);
-    await page.pdf({ path: 'out.pdf', format: 'A4' });
+    const pdfPath = '/tmp/out.pdf';
+    await page.pdf({ path: pdfPath, format: 'A4' });
     await browser.close();
+    res.setHeader('Access-Control-Allow-Origin', 'https://logistics-rihb.onrender.com');
+    res.setHeader('Access-Control-Allow-Methods', 'GET');
+    res.setHeader('Content-Type', 'application/pdf');
     res.download('out.pdf');
 });
 
