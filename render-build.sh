@@ -1,5 +1,10 @@
 #!/usr/bin/env bash
-# exit on errorset -o errexit
+# exit on error
+set -o errexit
+
+# Set the cache directories if they're not already set
+export PUPPETEER_CACHE_DIR=${PUPPETEER_CACHE_DIR:-'/opt/render/project/puppeteer/'}
+export XDG_CACHE_HOME=${XDG_CACHE_HOME:-'/opt/render/.cache/'}
 
 npm install
 # npm run build # uncomment if required
