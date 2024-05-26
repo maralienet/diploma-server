@@ -168,7 +168,9 @@ router.get('/cars/period/:from/:to', async (req, res) => {
     const page = await browser.newPage();
     page.setUserAgent("Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/95.0.4638.69 Safari/537.36")
     await page.setContent(html);
-    const pdfPath = '/tmp/out.pdf';
+    const date = new Date();
+    const timestamp = date.getTime();
+    const pdfPath = `/tmp/out_${timestamp}.pdf`;
     await page.pdf({ path: pdfPath, format: 'A4' });
     await browser.close();
     res.setHeader('Access-Control-Allow-Origin', 'https://logistics-rihb.onrender.com');
@@ -334,7 +336,9 @@ router.get('/cars/month', async (req, res) => {
     const page = await browser.newPage();
     page.setUserAgent("Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/95.0.4638.69 Safari/537.36")
     await page.setContent(html);
-    const pdfPath = '/tmp/out.pdf';
+    const date = new Date();
+    const timestamp = date.getTime();
+    const pdfPath = `/tmp/out_${timestamp}.pdf`;
     await page.pdf({ path: pdfPath, format: 'A4' });
     await browser.close();
     res.setHeader('Access-Control-Allow-Origin', 'https://logistics-rihb.onrender.com');
@@ -502,7 +506,9 @@ router.get('/routes/period/:from/:to', async (req, res) => {
     const page = await browser.newPage();
     page.setUserAgent("Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/95.0.4638.69 Safari/537.36")
     await page.setContent(html);
-    const pdfPath = '/tmp/out.pdf';
+    const date = new Date();
+    const timestamp = date.getTime();
+    const pdfPath = `/tmp/out_${timestamp}.pdf`;
     await page.pdf({ path: pdfPath, format: 'A4' });
     await browser.close();
     res.setHeader('Access-Control-Allow-Origin', 'https://logistics-rihb.onrender.com');
@@ -667,7 +673,9 @@ router.get('/routes/month', async (req, res) => {
     const page = await browser.newPage();
     page.setUserAgent("Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/95.0.4638.69 Safari/537.36")
     await page.setContent(html);
-    const pdfPath = '/tmp/out.pdf';
+    const date = new Date();
+    const timestamp = date.getTime();
+    const pdfPath = `/tmp/out_${timestamp}.pdf`;
     await page.pdf({ path: pdfPath, format: 'A4' });
     await browser.close();
     res.setHeader('Access-Control-Allow-Origin', 'https://logistics-rihb.onrender.com');
@@ -841,7 +849,9 @@ router.get('/logists/period/:from/:to', async (req, res) => {
     const page = await browser.newPage();
     page.setUserAgent("Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/95.0.4638.69 Safari/537.36")
     await page.setContent(html);
-    const pdfPath = '/tmp/out.pdf';
+    const date = new Date();
+    const timestamp = date.getTime();
+    const pdfPath = `/tmp/out_${timestamp}.pdf`;
     await page.pdf({ path: pdfPath, format: 'A4' });
     await browser.close();
     res.setHeader('Access-Control-Allow-Origin', 'https://logistics-rihb.onrender.com');
@@ -1012,7 +1022,9 @@ router.get('/logists/month', async (req, res) => {
     const page = await browser.newPage();
     page.setUserAgent("Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/95.0.4638.69 Safari/537.36")
     await page.setContent(html);
-    const pdfPath = '/tmp/out.pdf';
+    const date = new Date();
+    const timestamp = date.getTime();
+    const pdfPath = `/tmp/out_${timestamp}.pdf`;
     await page.pdf({ path: pdfPath, format: 'A4' });
     await browser.close();
     res.setHeader('Access-Control-Allow-Origin', 'https://logistics-rihb.onrender.com');
