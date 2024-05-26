@@ -326,11 +326,9 @@ router.get('/cars/month', async (req, res) => {
     
     const pathToExtension = path.join(process.cwd(), 'puppeteer');
     const browser = await puppeteer.launch({
-        args: [
-            `--disable-extensions-except=${pathToExtension}`,
-            `--load-extension=${pathToExtension}`,
-        ],
-    });
+        executablePath: process.env.CHROMIUM_PATH,
+        args: ['--no-sandbox'], // This was important. Can't remember why
+      });
     const page = await browser.newPage();
     page.setUserAgent("Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/95.0.4638.69 Safari/537.36")
     await page.setContent(html);
