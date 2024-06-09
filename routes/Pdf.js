@@ -345,7 +345,7 @@ router.get('/cars/month', async (req, res) => {
 router.get('/routes/period/:from/:to', async (req, res) => {
     let { from, to } = req.params;
     let result = await db.query(`
-    select to_char(date(routings."createdAt"),'DD.MM.YYYY') as "Дата", "routeId" as "Код", string_agg(concat(brand,' (',"gosNumber",')'), '<br/>') as "Грузовики", route as "Путь", length as "Протяжённость", weight as "Вес груза"
+    select to_char(date(routings."createdAt"),'DD.MM.YYYY') as "Дата", "routeId" as "Код", string_agg(concat(brand,' (',"gosNumber",')'), '<br/>') as "Грузовики", route as "Путь", length as "Протяжённость (км)", weight as "Вес груза (кг)"
     from routings
     join cars on cars.id=routings."carId"
     where routings."createdAt" >= '${from}' and routings."createdAt" < '${to}'::date + interval '1 day'
@@ -509,7 +509,7 @@ router.get('/routes/period/:from/:to', async (req, res) => {
 });
 router.get('/routes/month', async (req, res) => {
     let result = await db.query(`
-    select to_char(date(routings."createdAt"),'DD.MM.YYYY') as "Дата", "routeId" as "Код", string_agg(concat(brand,' (',"gosNumber",')'), '<br/>') as "Грузовики", route as "Путь", length as "Протяжённость", weight as "Вес груза"
+    select to_char(date(routings."createdAt"),'DD.MM.YYYY') as "Дата", "routeId" as "Код", string_agg(concat(brand,' (',"gosNumber",')'), '<br/>') as "Грузовики", route as "Путь", length as "Протяжённость (км)", weight as "Вес груза (кг)"
     from routings
     join cars on cars.id = routings."carId"
     where extract(month from routings."createdAt") = extract(month from current_date)
