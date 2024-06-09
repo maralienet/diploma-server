@@ -28,7 +28,7 @@ router.get('/active', async (req, res) => {
     join cars on cars.id=scedule."carId"
     join routings on routings.id=scedule."routeId"
     where "dateFrom"=date(now()) and
-    "timeFrom"<=cast(now() as time) and "timeTo"<=cast(now() as time)
+    "timeFrom"<=cast(now() as time) and "timeTo">=cast(now() as time)
     union
     select scedule.id, routings."routeId",cars.id as "carId",  concat(brand,' (',"gosNumber",')') as car,"isMulti","dateFrom","dateTo","timeFrom","timeTo",routings.route,scedule."createdAt" from scedule
     join cars on cars.id=scedule."carId"
