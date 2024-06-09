@@ -5,9 +5,9 @@ ENV CHROMIUM_PATH=/usr/bin/google-chrome-stable
 WORKDIR /usr/src/app
 COPY package*.json ./
 RUN npm ci
-# Check if Chromium is installed
+# Проверка установлен ли Chromium
 RUN which google-chrome-stable
-# Check Chromium version
+# Проверка версии Chromium
 RUN google-chrome-stable --version
 COPY . .
 CMD ["node","index.js"]
