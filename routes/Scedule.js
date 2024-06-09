@@ -33,7 +33,7 @@ router.get('/active', async (req, res) => {
     select scedule.id, routings."routeId",cars.id as "carId",  concat(brand,' (',"gosNumber",')') as car,"isMulti","dateFrom","dateTo","timeFrom","timeTo",routings.route,scedule."createdAt" from scedule
     join cars on cars.id=scedule."carId"
     join routings on routings.id=scedule."routeId"
-    where "dateTo">=date(now())
+    where "dateTo">=date(now()) and "dateFrom"<=date(now())
     order by id`);
     res.json(scedule.rows);
 });
